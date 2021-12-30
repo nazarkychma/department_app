@@ -13,6 +13,19 @@ class Department(db.Model):
     """
     __tablename__ = "departments"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(40), unique=True, nullable=False)
     employees = db.relationship("Employee", backref="departments")
+
+    def get_avg_salary(self) -> float:
+        salaries = [employee.salary for employee in self.employees]
+        if salaries:
+            return round(sum(salaries) / len(salaries), 2)
+        return 0
+
+    def as_dict(self) -> dict:
+        return {"id": self.id,
+                "name": self.name,
+                "avg_salary": self.get_avg_salary(),
+                "num_of_employees": len(self.employees),
+                "employees": [employee.as_dict() for employee in self.employees]}
