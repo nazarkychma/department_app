@@ -2,19 +2,26 @@
 This package contains app factory function
 Import all necessary libs
 """
-import datetime
+# pylint: disable=import-outside-toplevel
+# pylint: disable=unused-import
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_restful import Api
 
 from .config_files.config import Config
 
 db = SQLAlchemy()
 migrate = Migrate()
+api = Api(prefix="/api")
 
 
 def create_app():
+    """
+    Creates Flask application
+    :return: an instance of Flask application
+    """
     app = Flask(__name__)
     app.config.from_object(Config)
 
@@ -29,6 +36,17 @@ def create_app():
 
     app.register_blueprint(department_bp)
     app.register_blueprint(employee_bp)
+
+    from .rest.employee_api import EmployeeApi, EmployeesApi, EmployeesFilter
+    api.add_resource(EmployeesApi, '/employee')
+    api.add_resource(EmployeeApi, '/employee/<id_>')
+    api.add_resource(EmployeesFilter, '/employee/filter')
+
+    from .rest.department_api import DepartmentsApi, DepartmentApi
+    api.add_resource(DepartmentsApi, '/department')
+    api.add_resource(DepartmentApi, '/department/<id_>')
+
+    api.init_app(app)
 
     #with app.app_context():
         # db.create_all()

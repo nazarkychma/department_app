@@ -1,3 +1,7 @@
+"""
+
+"""
+# pylint: disable=too-few-public-methods
 from os import getenv
 
 

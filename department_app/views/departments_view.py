@@ -1,8 +1,8 @@
 """
 
 """
-from ..service.department_service import DepartmentService
 from flask import Blueprint, render_template, request, abort, flash, redirect
+from ..service.department_service import DepartmentService
 
 department_bp = Blueprint("departments", __name__, url_prefix="/department")
 
@@ -32,8 +32,9 @@ def department_view(id_: int):
     try:
         dep = DepartmentService.get_department(id_)
         return render_template("department.html", department=dep)
-    except Exception as e:
-        print(e)
+    except Exception as exc:
+        print(exc)
+        return redirect("/department")
 
 
 @department_bp.route("/<id_>/delete", methods=["GET"])
@@ -44,4 +45,3 @@ def delete_department(id_: int):
         flash(str(exc))
     finally:
         return redirect("/department")
-

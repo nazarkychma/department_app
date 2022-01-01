@@ -1,6 +1,7 @@
 """
 
 """
+# pylint: disable=no-member
 from department_app import db
 from ..models.deparment import Department
 
@@ -93,10 +94,10 @@ class DepartmentService:
         department = Department.query.filter_by(name=department_name).first()
         if department is not None:
             raise ValueError(f"Department with name: '{department_name}' already exists")
-        department = Department.query.filter_by(id=department_id).first
+        department = Department.query.filter_by(id=department_id).first()
         if department is None:
             raise ValueError(f"Department with id: {department_id} doesn't exist")
         department.name = department_name
-        db.session.commit(department)
+        db.session.add(department)
         db.session.commit()
         return department.as_dict()

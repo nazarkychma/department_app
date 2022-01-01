@@ -1,6 +1,8 @@
 """
 This module contains model which represents departments
 """
+# pylint: disable=too-few-public-methods
+# pylint: disable=no-member
 from department_app import db
 
 

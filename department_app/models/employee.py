@@ -1,8 +1,10 @@
 """
 This module contains model which represents employee
 """
-from department_app import db
+# pylint: disable=too-few-public-methods
+# pylint: disable=no-member
 from datetime import datetime
+from department_app import db
 from .deparment import Department
 
 
@@ -25,7 +27,11 @@ class Employee(db.Model):
     salary = db.Column(db.Float, nullable=False)
     department_id = db.Column(db.Integer, db.ForeignKey("departments.id"))
 
-    def as_dict(self):
+    def as_dict(self) -> dict:
+        """
+        Convert model dict
+        :rtype: dict
+        """
         return {"id": self.id,
                 "name": " ".join([self.first_name, self.last_name]),
                 "birthdate": self.birthdate,

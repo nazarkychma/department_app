@@ -1,6 +1,7 @@
 """
 
 """
+# pylint: disable=no-member
 import datetime
 
 from department_app import db
@@ -52,11 +53,13 @@ class EmployeeService:
         return employee.as_dict()
 
     @staticmethod
-    def update_employee(employee_id: int, updated_values) -> dict:
+    def update_employee(employee_id: int, updated_values: dict) -> dict:
         attrs = Employee.__dict__.keys()
         for key in list(updated_values.keys()):
             if key not in attrs or key == "id":
                 del updated_values[key]
+        if not updated_values:
+            raise ValueError("Nothing to update")
         rows = Employee.query.filter_by(id=employee_id).update(updated_values)
         if rows == 0:
             raise ValueError(f"Employee with id: {employee_id} doesn't exist")

@@ -2,9 +2,9 @@
 
 """
 from datetime import datetime
+from flask import Blueprint, render_template, request, abort, redirect, flash
 from ..service.employee_service import EmployeeService
 from ..service.department_service import DepartmentService
-from flask import Blueprint, render_template, request, abort, redirect, flash
 
 employee_bp = Blueprint("employees", __name__, url_prefix="/employee")
 
