@@ -13,6 +13,7 @@ from flask_restful import Api
 
 from .config_files.config import Config
 
+
 db = SQLAlchemy()
 migrate = Migrate()
 api = Api(prefix="/api")
@@ -28,6 +29,7 @@ def create_app():
 
     from .models.employee import Employee
     from .models.deparment import Department
+
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -48,8 +50,4 @@ def create_app():
     api.add_resource(DepartmentApi, '/department/<int:id_>')
 
     api.init_app(app)
-
-    #with app.app_context():
-        # db.create_all()
-
     return app

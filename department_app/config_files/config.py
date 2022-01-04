@@ -9,7 +9,7 @@ class Config:
     """
     Default config for Flask app
     """
-    SQLALCHEMY_DATABASE_URI = getenv("db_uri", "sqlite:///department_app.db")
+    SQLALCHEMY_DATABASE_URI = getenv("db_uri")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SESSION_TYPE = 'null'
     SECRET_KEY = 'super secret key'
