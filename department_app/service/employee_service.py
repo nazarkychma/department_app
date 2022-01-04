@@ -1,7 +1,13 @@
 """
+This module contains class which implements CRUD operations for Employee
 
+Classes:
+    EmployeeService
 """
 # pylint: disable=no-member
+# pylint: disable=line-too-long
+# pylint: disable=relative-beyond-top-level
+
 import datetime
 
 from department_app import db
@@ -11,15 +17,14 @@ from ..models.deparment import Department
 
 class EmployeeService:
     """
-
+    Class which provides functions to perform CRUD operations on Employee
+    All functions are static
     """
     @staticmethod
     def get_employee_by_id(employee_id: int) -> dict:
         """
-
-        :param employee_id:
+        Returns employee with given id
         :type employee_id: int
-        :return:
         :rtype: dict
         """
         employee = Employee.query.filter_by(id=employee_id).first()
@@ -31,7 +36,6 @@ class EmployeeService:
     def get_all_employees() -> list:
         """
         Returns all employees
-        :return:
         :rtype: list
         """
         return [employee.as_dict() for employee in Employee.query.all()]
@@ -40,9 +44,8 @@ class EmployeeService:
     def delete_employee(employee_id: int) -> dict:
         """
         Deletes employee by given id
-        :param employee_id:
+        Returns deleted employee
         :type employee_id: int
-        :return:
         :rtype: dict
         """
         employee = Employee.query.filter_by(id=employee_id).first()
@@ -54,6 +57,13 @@ class EmployeeService:
 
     @staticmethod
     def update_employee(employee_id: int, updated_values: dict) -> dict:
+        """
+        Updates employee with given id by given values
+        Returns updated employee
+        :type employee_id: int
+        :type updated_values: dict
+        :rtype: dict
+        """
         attrs = Employee.__dict__.keys()
         for key in list(updated_values.keys()):
             if key not in attrs or key == "id":
@@ -68,6 +78,14 @@ class EmployeeService:
 
     @staticmethod
     def get_employees_by_birthdate(lower_bound, upper_bound=None):
+        """
+        Filters and return list employees:
+            - who were born on selected date if only lower bound is provided
+            - who were born between lower and upper bounds if both are provided
+        :type lower_bound: datetime.date
+        :type upper_bound: datetime.date
+        :rtype: list
+        """
         if upper_bound is None:
             return [employee.as_dict() for employee in Employee.query.filter_by(birthdate=lower_bound).all()]
         if lower_bound > upper_bound:
@@ -77,6 +95,16 @@ class EmployeeService:
 
     @staticmethod
     def create_employee(first_name: str, last_name: str, birthdate: datetime.date, salary: float, department_id: int) -> dict:
+        """
+        Creates and returns new employee with given values
+        :type first_name: str
+        :type last_name: str
+        :type birthdate: datetime.date
+        :type salary: float
+        :param department_id:
+        :type department_id: int
+        :rtype: dict
+        """
         if salary < 0:
             raise ValueError("Salary can't be lower than 0")
         if Department.query.filter_by(id=department_id).first() is None:

@@ -4,6 +4,7 @@ Import all necessary libs
 """
 # pylint: disable=import-outside-toplevel
 # pylint: disable=unused-import
+# pylint: disable=cyclic-import
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -39,12 +40,12 @@ def create_app():
 
     from .rest.employee_api import EmployeeApi, EmployeesApi, EmployeesFilter
     api.add_resource(EmployeesApi, '/employee')
-    api.add_resource(EmployeeApi, '/employee/<id_>')
+    api.add_resource(EmployeeApi, '/employee/<int:id_>')
     api.add_resource(EmployeesFilter, '/employee/filter')
 
     from .rest.department_api import DepartmentsApi, DepartmentApi
     api.add_resource(DepartmentsApi, '/department')
-    api.add_resource(DepartmentApi, '/department/<id_>')
+    api.add_resource(DepartmentApi, '/department/<int:id_>')
 
     api.init_app(app)
 

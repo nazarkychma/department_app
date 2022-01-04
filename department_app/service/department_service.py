@@ -1,5 +1,8 @@
 """
+This module contains class which implements CRUD operations for Department
 
+Classes:
+    DepartmentService
 """
 # pylint: disable=no-member
 from department_app import db
@@ -8,15 +11,14 @@ from ..models.deparment import Department
 
 class DepartmentService:
     """
-
+    Class which provides functions to perform CRUD operations on Department
+    All functions are static
     """
     @staticmethod
     def get_department(department_id: int) -> dict:
         """
         Returns departments by giver id
-        :param department_id:
         :type department_id: int
-        :return:
         :rtype: dict
         """
         department = Department.query.filter_by(id=department_id).first()
@@ -28,7 +30,6 @@ class DepartmentService:
     def get_all_departments() -> list:
         """
         Returns all departments
-        :return:
         :rtype: list
         """
         return [department.as_dict() for department in Department.query.all()]
@@ -37,9 +38,7 @@ class DepartmentService:
     def create_department(name: str) -> dict:
         """
         Create and returns department with given name
-        :param name:
         :type name: str
-        :return:
         :rtype: dict
         """
         department = Department.query.filter_by(name=name).first()
@@ -54,9 +53,8 @@ class DepartmentService:
     def delete_department(department_id: int) -> dict:
         """
         Deletes department by given id
-        :param department_id:
+        Returns deleted department
         :type department_id: int
-        :return:
         :rtype: dict
         """
         department = Department.query.filter_by(id=department_id).first()
@@ -70,9 +68,7 @@ class DepartmentService:
     def get_employees(department_id: int) -> list:
         """
         Returns list of employees of department with given id
-        :param department_id:
         :type department_id: int
-        :return:
         :rtype: list
         """
         department = Department.query.filter_by(id=department_id).first()
@@ -84,11 +80,9 @@ class DepartmentService:
     def update_department(department_id: int, department_name: str) -> dict:
         """
         Updates department with given id
-        :param department_id:
+        Returns updated department
         :type department_id: int
-        :param department_name:
         :type department_name: str
-        :return:
         :rtype: dict
         """
         department = Department.query.filter_by(name=department_name).first()

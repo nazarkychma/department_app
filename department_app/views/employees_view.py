@@ -1,6 +1,8 @@
 """
-
+Module contains Employee views
 """
+# pylint: disable=broad-except
+# pylint: disable=relative-beyond-top-level
 from datetime import datetime
 from flask import Blueprint, render_template, request, abort, redirect, flash
 from ..service.employee_service import EmployeeService
@@ -11,12 +13,20 @@ employee_bp = Blueprint("employees", __name__, url_prefix="/employee")
 
 @employee_bp.route("/", methods=["GET"])
 def all_employees():
+    """
+    Show all the employees
+    """
     employees_list = EmployeeService.get_all_employees()
     return render_template("all_employees.html", employees=employees_list)
 
 
+# pylint: disable=line-too-long
 @employee_bp.route("/", methods=["POST"])
 def filter_employees():
+    """
+    Filter employees and show all, who satisfies given criteria
+    :raises 404: if form is not provided
+    """
     if not request.form:
         abort(404)
     if not request.form.get("fromdate"):
@@ -32,8 +42,12 @@ def filter_employees():
     return render_template("all_employees.html", employees=result, title=filter_title)
 
 
+# pylint: disable=line-too-long
 @employee_bp.route("/<id_>", methods=["GET"])
 def employee_view(id_: int):
+    """
+    Shows employee with given id
+    """
     try:
         departments_list = DepartmentService.get_all_departments()
         employee_data = EmployeeService.get_employee_by_id(id_)
@@ -45,6 +59,10 @@ def employee_view(id_: int):
 
 @employee_bp.route("/<id_>", methods=["POST"])
 def employee_edit(id_: int):
+    """
+    Updates employee with given id with values provided in form
+    :raises 404: if form is not provided
+    """
     if not request.form:
         abort(404)
     try:
@@ -62,12 +80,19 @@ def employee_edit(id_: int):
 
 @employee_bp.route("/create", methods=["GET"])
 def create_employee_get():
+    """
+    Shows form for creating employee
+    """
     departments_list = DepartmentService.get_all_departments()
     return render_template("create_employee.html", departments=departments_list, create=True)
 
 
 @employee_bp.route("/create", methods=["POST"])
 def create_employee_post():
+    """
+    Create new employee with values given in form
+    :raises 404: if form is not provided
+    """
     if not request.form:
         abort(404)
     try:
@@ -81,16 +106,18 @@ def create_employee_post():
         return redirect("/employee")
     except ValueError as exc:
         flash(str(exc))
-    finally:
         return redirect("/employee/create")
 
 
 @employee_bp.route("/<id_>/delete", methods=["GET"])
 def employee_delete(id_: int):
+    """
+    Deletes employee with given id and redirects to all employee view
+    """
     try:
         EmployeeService.delete_employee(id_)
         flash("Employee deleted")
+        return redirect("/employee")
     except Exception as exc:
         flash(str(exc))
-    finally:
         return redirect("/employee")
