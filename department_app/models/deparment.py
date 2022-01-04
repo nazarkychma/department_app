@@ -17,7 +17,7 @@ class Department(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(40), unique=True, nullable=False)
-    employees = db.relationship("Employee", backref="departments")
+    employees = db.relationship("Employee", backref="departments", cascade="all,delete")
 
     def get_avg_salary(self) -> float:
         """

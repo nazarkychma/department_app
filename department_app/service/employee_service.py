@@ -70,6 +70,9 @@ class EmployeeService:
                 del updated_values[key]
         if not updated_values:
             raise ValueError("Nothing to update")
+        salary = updated_values.get("salary")
+        if salary is not None and salary < 0:
+            raise ValueError("Salary can't be lower than 0")
         rows = Employee.query.filter_by(id=employee_id).update(updated_values)
         if rows == 0:
             raise ValueError(f"Employee with id: {employee_id} doesn't exist")

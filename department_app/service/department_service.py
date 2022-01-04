@@ -62,7 +62,7 @@ class DepartmentService:
             raise ValueError(f"Department with id: {department_id} doesn't exist")
         db.session.delete(department)
         db.session.commit()
-        return department.as_dict()
+        return {"Deleted": True}
 
     @staticmethod
     def get_employees(department_id: int) -> list:

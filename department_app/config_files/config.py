@@ -14,3 +14,12 @@ class Config:
     SESSION_TYPE = 'null'
     SECRET_KEY = 'super secret key'
     SESSION_PERMANENT = False
+
+
+class TestConfig:
+    """
+    Config for testing
+    """
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
+    TESTING = True
