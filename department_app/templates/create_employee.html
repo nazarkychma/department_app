@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h1> </h1>
+    <form action="" method="POST">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="">First and last name</span>
+            </div>
+            <input type="text" class="form-control", name="first_name" required>
+            <input type="text" class="form-control", name="last_name" required>
+        </div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" >Department</span>
+            </div>
+            <select class="form-select" id="departmentSelect" name="department" required>
+                <option selected>Choose department</option>
+                {% for department in departments %}
+                    <option value={{department["id"]}}>{{department["name"]}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="salary_id">Salary</span>
+            </div>
+            <input name="salary" type="number" class="form-control" aria-label="Salary" aria-describedby="inputGroup-sizing-default" min=0 step=0.01 required>
+        </div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">Birthdate</span>
+            </div>
+            <input type="date" id="datefield" name="birthdate" min="1930-01-01" required>
+
+            <script type="text/javascript">
+                var today = new Date();
+                var dd = today.getDate();
+                var mm = today.getMonth() + 1;
+                var yyyy = today.getFullYear();
+                if (dd < 10) {
+                    dd = '0' + dd;
+                }
+                if (mm < 10) {
+                    mm = '0' + mm;
+                }
+                today = yyyy + '-' + mm + '-' + dd;
+                document.getElementById("datefield").setAttribute("max", today);
+                document.getElementById("datefield").setAttribute("value", today);
+            </script>
+        </div>
+        <button class="btn btn-dark" type="submit">Create</button>
+    </form>
+</div>
+{% endblock %}

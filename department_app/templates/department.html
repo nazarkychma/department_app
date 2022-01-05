@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>{{department['name']}}</h2>
+    <a href={{url_for("departments.delete_department", id_=department['id']) }} class="btn btn-danger">Delete</a>
+    {% if department['employees'] %}
+    <h3>Employees</h3>
+        <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Salary</th>
+            <th scope="col">Birthdate</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in department['employees'] %}
+            <tr>
+                <td>{{ i['name']}}</td>
+                <td>{{ i['salary'] }}</td>
+                <td>{{ i['birthdate'] }}</td>
+                <td>
+                    <a href={{url_for("employees.employee_view", id_=i['id']) }} class="btn btn-outline-dark">View</a>
+                </td>
+                <!--{% if i['status'] != 'Done' and i['status'] != 'Stopped' %}
+                    <td><button id={{ i['id'] }} onclick="stopTask(this)" class="btn btn-outline-dark"> STOP </button></td>
+                {% endif %}-->
+            </tr>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}

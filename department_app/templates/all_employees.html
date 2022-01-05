@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1> </h1>
+    {% block datefilter %}
+    <form action="" method="POST">
+        <div class="input-group mb-3">
+            <span class="input-group-text">From | To</span>
+            <input type="date" name="fromdate" class="form-control">
+            <input type="date" name="todate" class="form-control">
+            <button class="btn btn-dark" type="submit">Filter</button>
+        </div>
+    </form>
+    {% endblock %}
+    <a href={{url_for("employees.create_employee_get")}} class="btn btn-outline-dark">Create new</a>
+    {% if title %}
+    <h3>{{title}}</h3>
+    {% endif %}
+    {% if employees %}
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Salary</th>
+            <th scope="col">Birthdate</th>
+            <th scope="col">Department</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in employees %}
+            <tr>
+                <th scope="row">{{i['id']}}</th>
+                <td>{{ i['name']}}</td>
+                <td>{{ i['salary'] }}</td>
+                <td>{{ i['birthdate'] }}</td>
+                <td><a href={{url_for("departments.department_view", id_=i['department_id']) }} >{{ i['department_name'] }}</a></td>
+                <td>
+                    <a href={{url_for("employees.employee_view", id_=i['id']) }} class="btn btn-outline-dark">View</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% block c %}
+    <div class="container">
+        <h1> </h1>
+        <form action="" method="POST">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="salary_id">Department</span>
+                </div>
+                <input type="text" name="department_name" class="form-control" placeholder="Name" required>
+                <button class="btn btn-outline-dark" type="submit">Create new</button>
+            </div>
+        </form>
+    </div>
+    {% endblock %}
+    {% if departments %}
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Average salary</th>
+            <th scope="col">Number of employees</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in departments %}
+            <tr>
+                <th scope="row">{{i['id']}}</th>
+                <td>{{ i['name']}}</td>
+                <td>{{ i['avg_salary'] }}</td>
+                <td>{{ i['num_of_employees'] }}</td>
+                <td>
+                    <a href={{url_for("departments.department_view", id_=i['id']) }} class="btn btn-outline-dark">View</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+{% endblock %}
