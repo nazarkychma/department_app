@@ -1,7 +1,7 @@
 """
 This module contains testcase class for department view
 """
-from conftest import BaseCase
+from .conftest import BaseCase
 
 
 class DepartmentViewTest(BaseCase):

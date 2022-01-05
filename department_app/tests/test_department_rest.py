@@ -2,8 +2,8 @@
 This module contains testcase class for department REST
 """
 import json
-from conftest import BaseCase
-from department_app.service.department_service import DepartmentService
+from .conftest import BaseCase
+from ..service.department_service import DepartmentService
 
 
 class DepartmentRESTTest(BaseCase):

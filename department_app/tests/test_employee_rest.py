@@ -2,8 +2,8 @@
 This module contains testcase class for employee REST
 """
 import json
-from conftest import BaseCase
-from department_app.service.employee_service import EmployeeService
+from .conftest import BaseCase
+from ..service.employee_service import EmployeeService
 
 
 class EmployeeRESTTest(BaseCase):
@@ -113,4 +113,3 @@ class EmployeeRESTTest(BaseCase):
         response = self.client.patch('/api/employee/5', data=json.dumps(self.employee_values), content_type='application/json')
         self.assertEqual(200, response.status_code)
         self.assertEqual("testcreate testcreate", EmployeeService.get_employee_by_id(5).get("name"))
-
