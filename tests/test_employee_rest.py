@@ -111,7 +111,6 @@ class EmployeeRESTTest(BaseCase):
 
     def test_update(self):
         response = self.client.patch('/api/employee/5', data=json.dumps(self.employee_values), content_type='application/json')
-        print(response.json)
         self.assertEqual(200, response.status_code)
         self.assertEqual("testcreate testcreate", EmployeeService.get_employee_by_id(5).get("name"))
 
