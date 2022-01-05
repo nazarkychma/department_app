@@ -23,3 +23,4 @@ class TestConfig:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
     TESTING = True
+    SECRET_KEY = 'super secret key'

@@ -13,10 +13,10 @@
     </form>
     {% endblock %}
     <a href={{url_for("employees.create_employee_get")}} class="btn btn-outline-dark">Create new</a>
-    {% if employees %}
     {% if title %}
     <h3>{{title}}</h3>
     {% endif %}
+    {% if employees %}
     <table class="table">
         <thead class="thead-dark">
         <tr>

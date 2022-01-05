@@ -1,7 +1,7 @@
 """
 This module contains testcase class for department service
 """
-from base import BaseCase
+from conftest import BaseCase
 from department_app.service.department_service import DepartmentService
 from department_app.models.deparment import Department
 

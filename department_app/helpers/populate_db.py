@@ -19,9 +19,9 @@ def seed_data():
 
     emp1 = Employee(id=1, first_name="Test", last_name="Test", salary=100, department_id=1)
     emp2 = Employee(id=2, first_name="Test", last_name="Test", salary=100, birthdate=datetime.date(2017, 11, 6), department_id=2)
-    emp3 = Employee(id=3, first_name="Test", last_name="Test", salary=100, birthdate=datetime.date(2002, 11, 6), department_id=3)
+    emp3 = Employee(id=3, first_name="Test3", last_name="Test", salary=100, birthdate=datetime.date(2002, 11, 6), department_id=3)
     emp4 = Employee(id=4, first_name="Test", last_name="Test", salary=100, birthdate=datetime.date(2005, 11, 6),department_id=4)
-    emp5 = Employee(id=5, first_name="Test", last_name="Test", salary=100, department_id=1)
+    emp5 = Employee(id=5, first_name="TestView", last_name="Test", salary=100, department_id=1)
 
     db.session.add(emp1)
     db.session.add(emp2)

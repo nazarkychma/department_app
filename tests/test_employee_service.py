@@ -3,7 +3,7 @@ This module contains testcase class for employee service
 """
 from datetime import date
 
-from base import BaseCase
+from conftest import BaseCase
 from department_app.service.employee_service import EmployeeService
 from department_app.models.employee import Employee
 

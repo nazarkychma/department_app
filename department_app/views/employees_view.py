@@ -4,7 +4,7 @@ Module contains Employee views
 # pylint: disable=broad-except
 # pylint: disable=relative-beyond-top-level
 from datetime import datetime
-from flask import Blueprint, render_template, request, abort, redirect, flash
+from flask import Blueprint, render_template, url_for, request, abort, redirect, flash
 from ..service.employee_service import EmployeeService
 from ..service.department_service import DepartmentService
 
@@ -31,15 +31,19 @@ def filter_employees():
         abort(404)
     if not request.form.get("fromdate"):
         flash("Setting lower bound is necessary")
-        return redirect('/employee')
-    if not request.form.get("todate"):
-        result = EmployeeService.get_employees_by_birthdate(datetime.strptime(request.form["fromdate"], "%Y-%m-%d"))
-        filter_title = f"Employees who were born on {request.form['fromdate']}"
-    else:
-        result = EmployeeService.get_employees_by_birthdate(datetime.strptime(request.form["fromdate"], "%Y-%m-%d"),
-                                                            datetime.strptime(request.form["todate"], "%Y-%m-%d"))
-        filter_title = f"Employees who born between {request.form['fromdate']} and {request.form['todate']}"
-    return render_template("all_employees.html", employees=result, title=filter_title)
+        return redirect(url_for("employees.all_employees"))
+    try:
+        if not request.form.get("todate"):
+            result = EmployeeService.get_employees_by_birthdate(datetime.strptime(request.form["fromdate"], "%Y-%m-%d"))
+            filter_title = f"Employees who were born on {request.form['fromdate']}"
+        else:
+            result = EmployeeService.get_employees_by_birthdate(datetime.strptime(request.form["fromdate"], "%Y-%m-%d"),
+                                                                datetime.strptime(request.form["todate"], "%Y-%m-%d"))
+            filter_title = f"Employees who born between {request.form['fromdate']} and {request.form['todate']}"
+        return render_template("all_employees.html", employees=result, title=filter_title)
+    except Exception as exc:
+        flash(str(exc))
+        return redirect(url_for("employees.all_employees"))
 
 
 # pylint: disable=line-too-long
@@ -54,7 +58,7 @@ def employee_view(id_: int):
         return render_template("edit_employee.html", employee=employee_data, departments=departments_list)
     except Exception as exc:
         flash(str(exc))
-        return redirect("/employee")
+        return redirect(url_for("employees.all_employees"))
 
 
 @employee_bp.route("/<id_>", methods=["POST"])
@@ -72,10 +76,10 @@ def employee_edit(id_: int):
         new_values["birthdate"] = datetime.strptime(new_values["birthdate"], "%Y-%m-%d")
         EmployeeService.update_employee(id_, new_values)
         flash("Employee is updated")
-        return redirect(f"/employee/{id_}")
+        return redirect(url_for("employees.employee_view", id_=id_))
     except Exception as exc:
         flash(str(exc))
-        return redirect("/employee")
+        return redirect(url_for("employees.all_employees"))
 
 
 @employee_bp.route("/create", methods=["GET"])
@@ -96,17 +100,18 @@ def create_employee_post():
     if not request.form:
         abort(404)
     try:
-        EmployeeService.create_employee(
+        employee = EmployeeService.create_employee(
             first_name=request.form["first_name"],
             last_name=request.form["last_name"],
             department_id=int(request.form["department"]),
             salary=float(request.form['salary']),
             birthdate=datetime.strptime(request.form["birthdate"], "%Y-%m-%d")
         )
-        return redirect("/employee")
+        flash("Created")
+        return redirect(url_for("employees.employee_view", id_=employee["id"]))
     except ValueError as exc:
         flash(str(exc))
-        return redirect("/employee/create")
+        return redirect(url_for("employees.create_employee_get"))
 
 
 @employee_bp.route("/<id_>/delete", methods=["GET"])
@@ -116,8 +121,8 @@ def employee_delete(id_: int):
     """
     try:
         EmployeeService.delete_employee(id_)
-        flash("Employee deleted")
-        return redirect("/employee")
+        flash(f"Employee with id: {id_} deleted")
+        return redirect(url_for("employees.all_employees"))
     except Exception as exc:
         flash(str(exc))
-        return redirect("/employee")
+        return redirect(url_for("employees.all_employees"))
