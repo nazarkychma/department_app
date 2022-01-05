@@ -29,10 +29,15 @@ class DepartmentTest(BaseCase):
             EmployeeService.update_employee(10, {"first_name": "Evanko"})
         assert str(exc.exception) == "Employee with id: 10 doesn't exist"
 
-    def test_update_with_wrong_values(self):
+    def test_update_with_wrong_salary_value(self):
         with self.assertRaises(ValueError) as exc:
             EmployeeService.update_employee(1, {"salary": -50})
         assert str(exc.exception) == "Salary can't be lower than 0"
+
+    def test_update_with_wrong_department(self):
+        with self.assertRaises(ValueError) as exc:
+            EmployeeService.update_employee(1, {"department_id": 50})
+        assert str(exc.exception) == "Department with id: 50 doesn't exist"
 
     def test_update_with_wrong_keys(self):
         with self.assertRaises(ValueError) as exc:

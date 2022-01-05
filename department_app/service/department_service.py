@@ -41,8 +41,7 @@ class DepartmentService:
         :type name: str
         :rtype: dict
         """
-        department = Department.query.filter_by(name=name).first()
-        if department is not None:
+        if Department.query.filter_by(name=name).first() is not None:
             raise ValueError("Department with this name already exists")
         department = Department(name=name)
         db.session.add(department)

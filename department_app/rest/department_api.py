@@ -24,7 +24,7 @@ class DepartmentsApi(Resource):
         """
         try:
             departments_list = DepartmentService.get_all_departments()
-            return make_response(jsonify(departments_list), 200)
+            return make_response(jsonify({"departments": departments_list}), 200)
         except Exception as exc:
             return make_response({"message": str(exc)}, 404)
 
@@ -35,9 +35,9 @@ class DepartmentsApi(Resource):
         Returns created department in json
         """
         try:
-            if not request.json["name"]:
+            if not request.json or request.json.get("name") is None:
                 return make_response({"message": "Missing arguments"}, 422)
-            department = DepartmentService.create_department(request.json["name"])
+            department = DepartmentService.create_department(request.json.get("name"))
             return make_response({"id": department['id']}, 201)
         except Exception as exc:
             return make_response({"message": str(exc)}, 404)
@@ -67,7 +67,7 @@ class DepartmentApi(Resource):
         Returns updated employee in json format
         """
         try:
-            if not request.json["name"]:
+            if not request.json or request.json.get("name") is None:
                 return make_response({"message": "Missing arguments"}, 422)
             department = DepartmentService.update_department(id_, request.json["name"])
             return make_response({"Updated": department}, 200)
@@ -81,7 +81,7 @@ class DepartmentApi(Resource):
         Returns deleted departments in json format
         """
         try:
-            department = DepartmentService.delete_department(id_)
-            return make_response({"Deleted": department}, 200)
+            result = DepartmentService.delete_department(id_)
+            return make_response(result, 200)
         except Exception as exc:
             return make_response({"message": str(exc)}, 404)

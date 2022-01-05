@@ -26,7 +26,7 @@ class EmployeesApi(Resource):
         """
         try:
             employee_list = EmployeeService.get_all_employees()
-            return make_response(jsonify(employee_list), 200)
+            return make_response({"employees": employee_list}, 200)
         except Exception as exc:
             return make_response({"message": str(exc)}, 404)
 
@@ -37,6 +37,8 @@ class EmployeesApi(Resource):
         Returns created employee in json format
         """
         try:
+            if not request.json:
+                raise KeyError
             employee = EmployeeService.create_employee(
                 first_name=request.json["first_name"],
                 last_name=request.json["last_name"],
@@ -45,6 +47,8 @@ class EmployeesApi(Resource):
                 department_id=request.json["department_id"]
             )
             return make_response(employee, 201)
+        except ValueError as exc:
+            return make_response({"message": str(exc)}, 404)
         except KeyError:
             return make_response({"message": "Missing arguments"}, 422)
         except Exception as exc:
@@ -85,8 +89,13 @@ class EmployeeApi(Resource):
         Updates employee with given id with values provided in request body
         Returns updated employee in json format
         """
+        if not request.json:
+            return make_response({"message": "Missing values"}, 404)
         try:
             update_values = dict(request.json)
+            update_values["salary"] = float(update_values["salary"])
+            update_values["department_id"] = int(update_values["department_id"])
+            update_values["birthdate"] = datetime.strptime(update_values["birthdate"], "%Y-%m-%d")
             employee = EmployeeService.update_employee(id_, update_values)
             return make_response({"Updated": employee}, 200)
         except Exception as exc:
@@ -106,15 +115,14 @@ class EmployeesFilter(Resource):
         Returns all employees, who satisfies filter criteria in json format
         """
         try:
-            print(request.args)
             if not request.args.get("from_date"):
                 return make_response({"message": "Setting lower bound is necessary"}, 422)
             if not request.args.get("to_date"):
-                res = EmployeeService.get_employees_by_birthdate(datetime.strptime(request.args["fromdate"], "%Y-%m-%d"))
+                res = EmployeeService.get_employees_by_birthdate(datetime.strptime(request.args["from_date"], "%Y-%m-%d"))
             else:
                 res = EmployeeService.get_employees_by_birthdate(
                     datetime.strptime(request.args["from_date"], "%Y-%m-%d"),
                     datetime.strptime(request.args["to_date"], "%Y-%m-%d"))
-            return make_response(jsonify(res), 200)
+            return make_response({"employees": res}, 200)
         except Exception as exc:
             return make_response({"message": str(exc)}, 404)

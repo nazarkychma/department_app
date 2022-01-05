@@ -113,5 +113,5 @@ class EmployeeViewTest(BaseCase):
                                         department=20,
                                         birthdate="2020-10-10",
                                         salary=50.6), follow_redirects=True)
-        assert b"Department with id: 20 doesn&#39;t exist"in rv.data
+        assert b"Department with id: 20 doesn&#39;t exist" in rv.data
         self.assertEqual("/employee/create", rv.request.path)
