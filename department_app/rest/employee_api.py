@@ -83,6 +83,7 @@ class EmployeeApi(Resource):
         except Exception as exc:
             return make_response({"message": str(exc)}, 404)
 
+    # pylint: disable=line-too-long
     def patch(self, id_: int):
         """
         Called during PATCH request
@@ -93,9 +94,12 @@ class EmployeeApi(Resource):
             return make_response({"message": "Missing values"}, 404)
         try:
             update_values = dict(request.json)
-            update_values["salary"] = float(update_values["salary"])
-            update_values["department_id"] = int(update_values["department_id"])
-            update_values["birthdate"] = datetime.strptime(update_values["birthdate"], "%Y-%m-%d")
+            if update_values.get("salary") is not None:
+                update_values["salary"] = float(update_values["salary"])
+            if update_values.get("department_id") is not None:
+                update_values["department_id"] = int(update_values["department_id"])
+            if update_values.get("birthdate") is not None:
+                update_values["birthdate"] = datetime.strptime(update_values["birthdate"], "%Y-%m-%d")
             employee = EmployeeService.update_employee(id_, update_values)
             return make_response({"Updated": employee}, 200)
         except Exception as exc:
