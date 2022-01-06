@@ -48,6 +48,23 @@ def department_view(id_: int):
         return redirect(url_for("departments.all_departments"))
 
 
+@department_bp.route("/<id_>", methods=["POST"])
+def department_update(id_: int):
+    """
+    Updates department with given id
+    """
+    department_name = request.form.get("department_name")
+    if not department_name:
+        abort(404)
+    try:
+        DepartmentService.update_department(id_, department_name)
+        flash("Department is updated")
+        return redirect(url_for("departments.department_view", id_=id_))
+    except ValueError as exc:
+        flash(str(exc))
+        return redirect(url_for("departments.department_view", id_=id_))
+
+
 @department_bp.route("/<id_>/delete", methods=["GET"])
 def delete_department(id_: int):
     """

@@ -6,7 +6,7 @@ Import all necessary libs
 # pylint: disable=unused-import
 # pylint: disable=cyclic-import
 
-from flask import Flask
+from flask import Flask, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_restful import Api
@@ -17,6 +17,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 api = Api(prefix="/api")
 
+# pylint: disable=wrong-import-position
 from .rest.department_api import DepartmentsApi, DepartmentApi
 from .rest.employee_api import EmployeeApi, EmployeesApi, EmployeesFilter
 
@@ -46,4 +47,9 @@ def create_app(cfg=DefaultCfg):
     db.init_app(app)
     migrate.init_app(app, db)
     api.init_app(app)
+
+    @app.route("/", methods=["GET"])
+    def index():
+        return redirect(url_for("departments.all_departments"))
+
     return app

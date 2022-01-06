@@ -1,8 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>{{department['name']}}</h2>
-    <a href={{url_for("departments.delete_department", id_=department['id']) }} class="btn btn-danger">Delete</a>
+    {% block c %}
+    <div class="container">
+        <h1> </h1>
+        <form action="" method="POST">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="salary_id">Department name</span>
+                </div>
+                <input type="text" name="department_name" class="form-control" placeholder="Name" required value={{department['name']}}>
+                <button class="btn btn-outline-dark" type="submit">Update</button>
+                <a href={{url_for("departments.delete_department", id_=department['id']) }} class="btn btn-danger">Delete</a>
+            </div>
+        </form>
+    </div>
+    {% endblock %}
     {% if department['employees'] %}
     <h3>Employees</h3>
         <table class="table">
