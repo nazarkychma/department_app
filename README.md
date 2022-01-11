@@ -1,7 +1,29 @@
 # Department application
 ## About
-
+It is simple application which provides you an ability to manage departments and employees.
+You can perform this task using web UI or REST API:
+- Create department/employee
+- Update department/employee
+- Delete department/employee
+- View department/employee
+- Filter employees by birthdate
+- Get average salary by department
 ## Installation guide
+1. Clone repo
+    > git clone https://github.com/nazarkychma/department_app.git
+2. Create virtual environment in project folder
+    > python3 -m venv ./venv
+3. Activate venv
+    > source venv/bin/activate
+4. Install requirements
+    > pip install -r requirements.txt
+5. Provide DB URL in environmental variables.
+   Replace postgresql://dep:dep@localhost:5432/mydatabase with your url.
+    > export db_uri=postgresql://dep:dep@localhost:5432/mydatabase
+6. Create tables using flask migrate
+    > flask db upgrade
+7. Run an application using gunicorn
+    > gunicorn --bind 0.0.0.0:5000 app:app
 
 ## API documentation
 ### Departments API
