@@ -7,10 +7,9 @@ Classes:
 # pylint: disable=no-member
 # pylint: disable=line-too-long
 # pylint: disable=relative-beyond-top-level
-
 import datetime
-
 from department_app import db
+from ..log import logger
 from ..models.employee import Employee
 from ..models.deparment import Department
 
@@ -29,6 +28,7 @@ class EmployeeService:
         """
         employee = Employee.query.filter_by(id=employee_id).first()
         if employee is None:
+            logger.error("User is trying to get employee, which doesn't exist")
             raise ValueError(f"Employee with id: {employee_id} doesn't exist")
         return employee.as_dict()
 
@@ -50,9 +50,11 @@ class EmployeeService:
         """
         employee = Employee.query.filter_by(id=employee_id).first()
         if employee is None:
+            logger.error("User is trying to delete employee, which doesn't exist")
             raise ValueError(f"Employee with id: {employee_id} doesn't exist")
         db.session.delete(employee)
         db.session.commit()
+        logger.info("Employee with id %d was deleted", employee_id)
         return employee.as_dict()
 
     @staticmethod
@@ -72,14 +74,18 @@ class EmployeeService:
             raise ValueError("Nothing to update")
         salary = updated_values.get("salary")
         if salary is not None and salary < 0:
+            logger.error("User is trying to update employee with invalid salary")
             raise ValueError("Salary can't be lower than 0")
         department_id = updated_values.get("department_id")
         if department_id and Department.query.filter_by(id=department_id).first() is None:
+            logger.error("User is trying to update employee with invalid department id")
             raise ValueError(f"Department with id: {department_id} doesn't exist")
         rows = Employee.query.filter_by(id=employee_id).update(updated_values)
         if rows == 0:
+            logger.error("User is trying to update employee, which doesn't exist")
             raise ValueError(f"Employee with id: {employee_id} doesn't exist")
         db.session.commit()
+        logger.info("Employee with id %d was updated", employee_id)
         return Employee.query.filter_by(id=employee_id).first().as_dict()
 
     @staticmethod
@@ -95,6 +101,7 @@ class EmployeeService:
         if upper_bound is None:
             return [employee.as_dict() for employee in Employee.query.filter_by(birthdate=lower_bound).all()]
         if lower_bound > upper_bound:
+            logger.error("User is trying to filter employees with invalid dates")
             raise ValueError("Upper bound should be higher than lower")
         return [employee.as_dict() for employee in Employee.query.filter(Employee.birthdate >= lower_bound,
                                                                              Employee.birthdate <= upper_bound).all()]
@@ -114,9 +121,11 @@ class EmployeeService:
         if salary < 0:
             raise ValueError("Salary can't be lower than 0")
         if Department.query.filter_by(id=department_id).first() is None:
+            logger.error("User is trying to create employee with invalid department id")
             raise ValueError(f"Department with id: {department_id} doesn't exist")
         employee = Employee(first_name=first_name, last_name=last_name,
                             birthdate=birthdate, salary=salary, department_id=department_id)
         db.session.add(employee)
         db.session.commit()
+        logger.info("New employee created with id: %d", employee.id)
         return employee.as_dict()

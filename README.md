@@ -1,7 +1,7 @@
 # Department application
 ## About
 It is simple application which provides you an ability to manage departments and employees.
-You can perform this task using web UI or REST API:
+You can perform this actions using web UI or REST API:
 - Create department/employee
 - Update department/employee
 - Delete department/employee
@@ -17,9 +17,10 @@ You can perform this task using web UI or REST API:
     > source venv/bin/activate
 4. Install requirements
     > pip install -r requirements.txt
-5. Provide DB URL in environmental variables.
-   Replace postgresql://dep:dep@localhost:5432/mydatabase with your url.
+5. Provide DB URL and session key in environmental variables.
+   Replace values.
     > export db_uri=postgresql://dep:dep@localhost:5432/mydatabase
+    > export session_key=supersecretkey 
 6. Create tables using flask migrate
     > flask db upgrade
 7. Run an application using gunicorn

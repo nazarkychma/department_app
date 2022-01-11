@@ -5,7 +5,9 @@ Classes:
     DepartmentService
 """
 # pylint: disable=no-member
+# pylint: disable=relative-beyond-top-level
 from department_app import db
+from ..log import logger
 from ..models.deparment import Department
 
 
@@ -23,6 +25,7 @@ class DepartmentService:
         """
         department = Department.query.filter_by(id=department_id).first()
         if department is None:
+            logger.error("User is trying to get department, which doesn't exist")
             raise ValueError(f"Department with id: {department_id} doesn't exist")
         return department.as_dict()
 
@@ -42,10 +45,12 @@ class DepartmentService:
         :rtype: dict
         """
         if Department.query.filter_by(name=name).first() is not None:
+            logger.error("User is trying to create department with invalid name")
             raise ValueError("Department with this name already exists")
         department = Department(name=name)
         db.session.add(department)
         db.session.commit()
+        logger.info("New department with name %s was created", name)
         return department.as_dict()
 
     @staticmethod
@@ -58,9 +63,11 @@ class DepartmentService:
         """
         department = Department.query.filter_by(id=department_id).first()
         if department is None:
+            logger.error("User is trying to delete department, which doesn't exist")
             raise ValueError(f"Department with id: {department_id} doesn't exist")
         db.session.delete(department)
         db.session.commit()
+        logger.info("Department with id %d was deleted", department_id)
         return {"Deleted": True}
 
     @staticmethod
@@ -72,9 +79,11 @@ class DepartmentService:
         """
         department = Department.query.filter_by(id=department_id).first()
         if department is None:
+            logger.error("User is trying to get employees of department, which doesn't exist")
             raise ValueError(f"Department with id: {department_id} doesn't exist")
         return [employee.as_dict() for employee in department.employees]
 
+    # pylint: disable=line-too-long
     @staticmethod
     def update_department(department_id: int, department_name: str) -> dict:
         """
@@ -86,11 +95,14 @@ class DepartmentService:
         """
         department = Department.query.filter_by(name=department_name).first()
         if department is not None:
+            logger.error("User is trying to update department with invalid name")
             raise ValueError(f"Department with name: '{department_name}' already exists")
         department = Department.query.filter_by(id=department_id).first()
         if department is None:
+            logger.error("User is trying to update department, which doesn't exist")
             raise ValueError(f"Department with id: {department_id} doesn't exist")
         department.name = department_name
         db.session.add(department)
         db.session.commit()
+        logger.info("Department with id %d was updated with new name: {department_name}", department.id)
         return department.as_dict()

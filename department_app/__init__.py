@@ -5,7 +5,7 @@ Import all necessary libs
 # pylint: disable=import-outside-toplevel
 # pylint: disable=unused-import
 # pylint: disable=cyclic-import
-
+import logging
 from flask import Flask, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate

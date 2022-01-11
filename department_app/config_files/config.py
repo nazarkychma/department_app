@@ -12,7 +12,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI = getenv("db_uri")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SESSION_TYPE = 'null'
-    SECRET_KEY = 'super secret key'
+    SECRET_KEY = getenv("session_key")
     SESSION_PERMANENT = False
 
 
