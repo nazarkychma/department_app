@@ -1,4 +1,5 @@
 # Department application
+[![Coverage Status](https://coveralls.io/repos/github/nazarkychma/department_app/badge.svg?branch=main)](https://coveralls.io/github/nazarkychma/department_app?branch=main)
 ## About
 It is simple application which provides you an ability to manage departments and employees.
 You can perform this actions using web UI or REST API:
