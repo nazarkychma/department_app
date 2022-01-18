@@ -167,4 +167,4 @@ Constraints for data validation:
 * Page with updated list of employees and flash message are displayed.
 
 ![](images/edit_delete_employee.png)  
-Pic. 2.4 Delete a n employee.
+Pic. 2.4 Delete an employee.
