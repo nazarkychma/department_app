@@ -67,7 +67,7 @@ class DepartmentService:
             raise ValueError(f"Department with id: {department_id} doesn't exist")
         db.session.delete(department)
         db.session.commit()
-        logger.info("Department with id %d was deleted", department_id)
+        logger.info(f"Department with id {department_id} was deleted")
         return {"Deleted": True}
 
     @staticmethod
@@ -104,5 +104,5 @@ class DepartmentService:
         department.name = department_name
         db.session.add(department)
         db.session.commit()
-        logger.info("Department with id %d was updated with new name: {department_name}", department.id)
+        logger.info(f"Department with id {department.id} was updated with new name: {department_name}")
         return department.as_dict()
