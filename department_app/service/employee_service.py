@@ -54,7 +54,7 @@ class EmployeeService:
             raise ValueError(f"Employee with id: {employee_id} doesn't exist")
         db.session.delete(employee)
         db.session.commit()
-        logger.info("Employee with id %d was deleted", employee_id)
+        logger.info(f"Employee with id {employee_id} was deleted")
         return employee.as_dict()
 
     @staticmethod
@@ -85,7 +85,7 @@ class EmployeeService:
             logger.error("User is trying to update employee, which doesn't exist")
             raise ValueError(f"Employee with id: {employee_id} doesn't exist")
         db.session.commit()
-        logger.info("Employee with id %d was updated", employee_id)
+        logger.info(f"Employee with id {employee_id} was updated")
         return Employee.query.filter_by(id=employee_id).first().as_dict()
 
     @staticmethod
