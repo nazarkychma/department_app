@@ -24,6 +24,9 @@ jobs:
         run: |
           coverage run -m unittest discover
           coverage report --fail-under=90
+      - name: Pylint
+        run: |
+          pylint ./deparment_app
       - name: Check docker installed or not
         run: docker run hello-world
       - name: Push to docker hub
